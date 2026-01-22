@@ -11,13 +11,14 @@ namespace remapper
 {
 	Remapper::Remapper(const std::string& configName) : m_configName(configName) {}
 
-	bool Remapper::Load()
+	bool 
+	Remapper::load()
 	{
 		std::ifstream file(m_configName);
 
 		if (!file.is_open())
 		{
-			logger::Error("Failed to open config: " + m_configName);
+			logger::error("Failed to open config: " + m_configName);
 			return false;
 		}
 
@@ -25,15 +26,16 @@ namespace remapper
 
 		while (std::getline(file, line))
 		{
-			if (IsValidMappingLine(line))
+			if (isValidMappingLine(line))
 			{
-				ProcessMappingLine(line);
+				processMappingLine(line);
 			}
 		}
 		return true;
 	}
 
-	bool Remapper::IsValidMappingLine(const std::string& line)
+	bool 
+	Remapper::isValidMappingLine(const std::string& line)
 	{
 		if (line.empty() || line.rfind("//", 0) == 0)
 		{
@@ -45,7 +47,8 @@ namespace remapper
 		return delim != std::string::npos && delim != 0 && delim + 2 < line.size();
 	}
 
-	void Remapper::ProcessMappingLine(const std::string& line)
+	void 
+	Remapper::processMappingLine(const std::string& line)
 	{
 		size_t delim = line.find("--");
 
@@ -54,27 +57,30 @@ namespace remapper
 
 		for (auto state : { input::State::Down, input::State::Up })
 		{
-			input::Input from = ParseInput(fromStr, state);
-			input::Input to = ParseInput(toStr, state);
+			input::Input from = parseInput(fromStr, state);
+			input::Input to = parseInput(toStr, state);
 
 			m_remaps[from] = to;
 		}
 
-		logger::Info("Mapping " + fromStr + " -> " + toStr);
+		logger::info("Mapping " + fromStr + " -> " + toStr);
 	}
 
-	bool Remapper::HasMapping(const input::Input& input) const
+	bool 
+	Remapper::hasMapping(const input::Input& input) const
 	{
 		return m_remaps.find(input) != m_remaps.end();
 	}
 
-	input::Input Remapper::GetMappedKey(const input::Input& input) const
+	input::Input 
+	Remapper::getMappedKey(const input::Input& input) const
 	{
 		auto it = m_remaps.find(input);
 		return it != m_remaps.end() ? it->second : input;
 	}
 
-	input::Input Remapper::ParseInput(const std::string& s, input::State state)
+	input::Input 
+	Remapper::parseInput(const std::string& s, input::State state)
 	{
 		if (s.size() == 1)
 		{
@@ -114,8 +120,8 @@ namespace remapper
 			}
 		}
 
-		logger::Warn("unrecognized key in config");
-		logger::Warn(s);
+		logger::warn("unrecognized key in config");
+		logger::warn(s);
 		return input::Input{ input::Type::Keyboard, 0, state };
 	}
 }

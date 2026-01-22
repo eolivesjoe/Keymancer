@@ -17,7 +17,8 @@ namespace keyhook
 		m_remapper = &remapper;
 	}
 
-	LRESULT CALLBACK KeyHook::KeyboardProc(int nCode, WPARAM wParam, LPARAM lParam)
+	LRESULT CALLBACK 
+	KeyHook::keyboardProc(int nCode, WPARAM wParam, LPARAM lParam)
 	{
 		if (nCode == HC_ACTION)
 		{
@@ -28,13 +29,13 @@ namespace keyhook
 				return CallNextHookEx(nullptr, nCode, wParam, lParam);
 			}
 
-			input::Input realInput = KeyboardVkToInput(p->vkCode, wParam);
+			input::Input realInput = keyboardVkToInput(p->vkCode, wParam);
 
-			logger::Info("vkCode: " + std::to_string(p->vkCode));
+			logger::info("vkCode: " + std::to_string(p->vkCode));
 
-			if (m_keymancerEnabled && m_remapper->HasMapping(realInput))
+			if (m_keymancerEnabled && m_remapper->hasMapping(realInput))
 			{
-				input::Input mapping = m_remapper->GetMappedKey(realInput);
+				input::Input mapping = m_remapper->getMappedKey(realInput);
 
 				INPUT fakeInput = { 0 };
 				fakeInput.type = INPUT_KEYBOARD;
@@ -49,14 +50,15 @@ namespace keyhook
 					fakeInput.ki.dwFlags = KEYEVENTF_KEYUP;
 				}
 
-				Worker::QueueInput(fakeInput);
+				Worker::queueInput(fakeInput);
 				return 1;
 			}
 		}
 		return CallNextHookEx(nullptr, nCode, wParam, lParam);
 	}
 
-	input::Input KeyHook::KeyboardVkToInput(DWORD vkCode, WPARAM wParam)
+	input::Input 
+	KeyHook::keyboardVkToInput(DWORD vkCode, WPARAM wParam)
 	{
 		input::State state;
 
@@ -81,7 +83,8 @@ namespace keyhook
 	}
 
 
-	LRESULT CALLBACK KeyHook::MouseProc(int nCode, WPARAM wParam, LPARAM lParam)
+	LRESULT CALLBACK 
+	KeyHook::mouseProc(int nCode, WPARAM wParam, LPARAM lParam)
 	{
 		if (nCode == HC_ACTION)
 		{
@@ -92,11 +95,11 @@ namespace keyhook
 				return CallNextHookEx(nullptr, nCode, wParam, lParam);
 			}
 
-			input::Input realInput = MouseWParamToInput(wParam);
+			input::Input realInput = mouseWParamToInput(wParam);
 
-			if (m_keymancerEnabled && m_remapper->HasMapping(realInput))
+			if (m_keymancerEnabled && m_remapper->hasMapping(realInput))
 			{
-				input::Input mapping = m_remapper->GetMappedKey(realInput);
+				input::Input mapping = m_remapper->getMappedKey(realInput);
 
 				INPUT fakeInput = { 0 };
 				fakeInput.type = INPUT_MOUSE;
@@ -135,14 +138,15 @@ namespace keyhook
 				default:
 					break;
 				}
-				Worker::QueueInput(fakeInput);
+				Worker::queueInput(fakeInput);
 				return 1;
 			}
 		}
 		return CallNextHookEx(nullptr, nCode, wParam, lParam);
 	}
 
-	input::Input KeyHook::MouseWParamToInput(WPARAM wParam)
+	input::Input 
+	KeyHook::mouseWParamToInput(WPARAM wParam)
 	{
 		switch (wParam)
 		{
@@ -167,31 +171,32 @@ namespace keyhook
 		}
 	}
 
-	void KeyHook::Run()
+	void 
+	KeyHook::run()
 	{
-		HHOOK keyboardHook = SetWindowsHookEx(WH_KEYBOARD_LL, (HOOKPROC)KeyboardProc, nullptr, 0);
+		HHOOK keyboardHook = SetWindowsHookEx(WH_KEYBOARD_LL, (HOOKPROC)keyboardProc, nullptr, 0);
 
 		if (!keyboardHook)
 		{
-			logger::Error("failed to install keyboard hook...");
+			logger::error("failed to install keyboard hook...");
 			return;
 		}
 
-		HHOOK mouseHook = SetWindowsHookEx(WH_MOUSE_LL, (HOOKPROC)MouseProc, nullptr, 0);
+		HHOOK mouseHook = SetWindowsHookEx(WH_MOUSE_LL, (HOOKPROC)mouseProc, nullptr, 0);
 
 		if (!mouseHook)
 		{
-			logger::Error("failed to install mouse hook...");
+			logger::error("failed to install mouse hook...");
 			return;
 		}
 
 		RegisterHotKey(nullptr, 1, 0, VK_HOME);
 		RegisterHotKey(nullptr, 2, 0, VK_DELETE);
 
-		logger::Info("press HOME to toggle rebind...");
-		logger::Info("press DEL twice to exit...");
+		logger::info("press HOME to toggle rebind...");
+		logger::info("press DEL twice to exit...");
 
-		logger::Info("keymancer running...");
+		logger::info("keymancer running...");
 
 		MSG msg;
 
@@ -200,7 +205,7 @@ namespace keyhook
 			if (msg.message == WM_HOTKEY && msg.wParam == 1) 
 			{
 				m_keymancerEnabled = !m_keymancerEnabled;
-				m_keymancerEnabled ? logger::Info("keymancer enabled...") : logger::Info("keymancer disabled...");
+				m_keymancerEnabled ? logger::info("keymancer enabled...") : logger::info("keymancer disabled...");
 			}
 
 			if (msg.message == WM_HOTKEY && msg.wParam == 2)

@@ -6,7 +6,8 @@
 
 namespace input
 {
-	bool Input::operator==(const Input& other) const
+	bool 
+	Input::operator==(const Input& other) const
 	{
 		return type == other.type && code == other.code && state == other.state;
 	}

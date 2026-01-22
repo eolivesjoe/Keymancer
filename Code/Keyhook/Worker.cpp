@@ -8,13 +8,15 @@ namespace keyhook
 	std::atomic<bool> Worker::m_running = false;
 	std::thread Worker::m_thread;
 
-	void Worker::Start()
+	void 
+	Worker::start()
 	{
 		m_running = true;
-		m_thread = std::thread(InputWorker);
+		m_thread = std::thread(inputWorker);
 	}
 
-	void Worker::Stop()
+	void 
+	Worker::stop()
 	{
 		m_running = false;
 		m_cv.notify_all();
@@ -25,7 +27,8 @@ namespace keyhook
 		}
 	}
 
-	void Worker::QueueInput(const INPUT& input)
+	void 
+	Worker::queueInput(const INPUT& input)
 	{
 		{
 			std::lock_guard<std::mutex> lock(m_mutex);
@@ -34,7 +37,8 @@ namespace keyhook
 		m_cv.notify_one();
 	}
 
-	void Worker::InputWorker()
+	void 
+	Worker::inputWorker()
 	{
 		while (m_running)
 		{

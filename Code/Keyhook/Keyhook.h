@@ -13,14 +13,14 @@ namespace keyhook
 	{
 	public:
 		KeyHook(remapper::Remapper& remapper);
-		void Run();
+		void run();
 
 	private:
-		static LRESULT CALLBACK KeyboardProc(int nCode, WPARAM wParam, LPARAM lParam);
-		static input::Input KeyboardVkToInput(DWORD vkCode, WPARAM wCaram);
+		static LRESULT CALLBACK keyboardProc(int nCode, WPARAM wParam, LPARAM lParam);
+		static input::Input keyboardVkToInput(DWORD vkCode, WPARAM wCaram);
 
-		static LRESULT CALLBACK MouseProc(int nCode, WPARAM wParam, LPARAM lParam);
-		static input::Input MouseWParamToInput(WPARAM wParam);
+		static LRESULT CALLBACK mouseProc(int nCode, WPARAM wParam, LPARAM lParam);
+		static input::Input mouseWParamToInput(WPARAM wParam);
 
 	private:
 		static remapper::Remapper* m_remapper;

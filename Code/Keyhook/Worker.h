@@ -12,12 +12,12 @@ namespace keyhook
 	class Worker
 	{
 	public:
-		static void Start();
-		static void Stop();
-		static void QueueInput(const INPUT& input);
+		static void start();
+		static void stop();
+		static void queueInput(const INPUT& input);
 
 	private:
-		static void InputWorker();
+		static void inputWorker();
 
 		static std::queue<INPUT> m_queue;
 		static std::mutex m_mutex;

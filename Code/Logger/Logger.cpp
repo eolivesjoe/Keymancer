@@ -3,22 +3,26 @@
 
 namespace logger 
 {
-    void Init()
+    void 
+    init()
     {
         std::ios::sync_with_stdio(false);
     }
 
-    void Info(const std::string& msg)
+    void 
+    info(const std::string& msg)
     {
         std::cout << "[INFO] " << msg << std::endl;
     }
 
-    void Warn(const std::string& msg)
+    void 
+    warn(const std::string& msg)
     {
         std::cerr << "[WARNING] " << msg << std::endl;
     }
 
-    void Error(const std::string& msg)
+    void 
+    error(const std::string& msg)
     {
         std::cerr << "[ERROR] " << msg << std::endl;
     }

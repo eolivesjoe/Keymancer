@@ -7,11 +7,11 @@
 
 int main(int argc, char* argv[])
 {
-    logger::Init();
+    logger::init();
 
     if (argc < 2) 
     {
-        logger::Error("No config file specified.");
+        logger::error("No config file specified.");
         return 1;
     }
 
@@ -22,11 +22,11 @@ int main(int argc, char* argv[])
         configName = std::string("config/") + configName;
     }
 
-    logger::Info("Loading config: " + configName);
+    logger::info("Loading config: " + configName);
 
     remapper::Remapper remapper(configName);
 
-    if (!remapper.Load())
+    if (!remapper.load())
     {
         return 1;
     }
@@ -35,8 +35,8 @@ int main(int argc, char* argv[])
     keyhook::KeyHook hook(remapper);
     keyhook::Worker worker;
 
-    worker.Start();
-    hook.Run();
-    worker.Stop();
+    worker.start();
+    hook.run();
+    worker.stop();
     return 0;
 }

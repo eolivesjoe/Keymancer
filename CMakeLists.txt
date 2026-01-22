@@ -8,14 +8,14 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin/lib)
 
 add_executable(Keymancer
-    source/main.cpp
+    Code/main.cpp
 
-    source/remapper/Remapper.cpp
-    source/input/Input.cpp
-    source/keyhook/Keyhook.cpp
-    source/keyhook/Worker.cpp
-    source/autopress/Autopress.cpp
-    source/logger/Logger.cpp
+    Code/Remapper/Remapper.cpp
+    Code/Input/Input.cpp
+    Code/Keyhook/Keyhook.cpp
+    Code/Keyhook/Worker.cpp
+    Code/Autopress/Autopress.cpp
+    Code/Logger/Logger.cpp
 )
 
 if(EXISTS "${CMAKE_SOURCE_DIR}/config")

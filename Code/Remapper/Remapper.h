@@ -12,14 +12,14 @@ namespace remapper
 	{
 	public:
 		Remapper(const std::string& configPath);
-		bool Load();
-		bool HasMapping(const input::Input& input) const;
-		input::Input GetMappedKey(const input::Input& input) const;
+		bool load();
+		bool hasMapping(const input::Input& input) const;
+		input::Input getMappedKey(const input::Input& input) const;
 
 	private:
-		bool IsValidMappingLine(const std::string& line); 
-		void ProcessMappingLine(const std::string& line);
-		input::Input ParseInput(const std::string& s, input::State state);
+		bool isValidMappingLine(const std::string& line); 
+		void processMappingLine(const std::string& line);
+		input::Input parseInput(const std::string& s, input::State state);
 
 	private:
 		std::string m_configName;
